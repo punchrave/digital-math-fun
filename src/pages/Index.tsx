@@ -37,19 +37,19 @@ const features = [
 
 const news = [
   {
-    date: "18 декабря 2024",
-    title: "Открытая лекция по машинному обучению",
-    description: "Приглашаем студентов на открытую лекцию профессора Иванова А.С.",
+    date: "22 декабря 2025",
+    title: "Фестиваль арабского языка и культуры в НИУ «БелГУ»",
+    description: "В университете прثошёл Фестиваль арабского языка и культуры с участием студентов и гостей.",
   },
   {
-    date: "15 декабря 2024",
-    title: "Результаты зимней сессии",
-    description: "Опубликованы предварительные результаты зимней экзаменационной сессии.",
+    date: "20 декабря 2025",
+    title: "Международная научная конференция",
+    description: "Кафедра провела ежегодную конференцию по математическому моделированию.",
   },
   {
-    date: "10 декабря 2024",
-    title: "Научная конференция",
-    description: "Кафедра проводит ежегодную научную конференцию студентов и аспирантов.",
+    date: "10 декабря 2025",
+    title: "Новый выпуск газеты «ВЕСТИ БелГУ»",
+    description: "Вышел новый номер университетской газеты с материалами о достижениях кафедры.",
   },
 ];
 
@@ -90,22 +90,25 @@ export default function Index() {
       {/* Stats Section */}
       <section className="border-b bg-card py-12">
         <div className="container">
+          <div className="mb-6 text-center">
+            <p className="text-sm text-muted-foreground">НИУ «БелГУ» — один из ведущих исследовательских университетов России</p>
+          </div>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="text-center">
-              <p className="text-3xl font-bold text-primary sm:text-4xl">50+</p>
-              <p className="mt-1 text-sm text-muted-foreground">Лет истории</p>
+              <p className="text-3xl font-bold text-primary sm:text-4xl">1876</p>
+              <p className="mt-1 text-sm text-muted-foreground">Год основания</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-primary sm:text-4xl">25</p>
-              <p className="mt-1 text-sm text-muted-foreground">Преподавателей</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-primary sm:text-4xl">500+</p>
+              <p className="text-3xl font-bold text-primary sm:text-4xl">25 700+</p>
               <p className="mt-1 text-sm text-muted-foreground">Студентов</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-primary sm:text-4xl">15</p>
-              <p className="mt-1 text-sm text-muted-foreground">Направлений</p>
+              <p className="text-3xl font-bold text-primary sm:text-4xl">1 100+</p>
+              <p className="mt-1 text-sm text-muted-foreground">Докторов и кандидатов наук</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-primary sm:text-4xl">103</p>
+              <p className="mt-1 text-sm text-muted-foreground">Кафедры</p>
             </div>
           </div>
         </div>
