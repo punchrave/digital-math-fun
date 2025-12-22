@@ -160,3 +160,43 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Accessibility styles */
+.high-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --primary: 60 100% 50%;
+  --primary-foreground: 0 0% 0%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+}
+
+.high-contrast a,
+.high-contrast button {
+  outline: 2px solid hsl(60 100% 50%) !important;
+  outline-offset: 2px;
+}
+
+.grayscale-mode {
+  filter: grayscale(100%);
+}
+
+.underline-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+.large-spacing {
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.8;
+}
+
+.large-spacing p,
+.large-spacing li,
+.large-spacing span {
+  margin-bottom: 0.5em;
+}
