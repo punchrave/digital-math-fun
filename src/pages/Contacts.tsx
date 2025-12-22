@@ -56,8 +56,8 @@ export default function Contacts() {
                     <div>
                       <h3 className="mb-1 font-semibold">Адрес</h3>
                       <p className="text-sm text-muted-foreground">
-                        г. Москва, ул. Университетская, д. 1<br />
-                        Главный корпус, ауд. 301-315
+                        308015, г. Белгород, ул. Победы, 85<br />
+                        Институт инженерных и цифровых технологий
                       </p>
                     </div>
                   </CardContent>
@@ -71,12 +71,8 @@ export default function Contacts() {
                     <div>
                       <h3 className="mb-1 font-semibold">Телефон</h3>
                       <p className="text-sm text-muted-foreground">
-                        <a href="tel:+74951234567" className="hover:text-primary">
-                          +7 (495) 123-45-67
-                        </a>
-                        <br />
-                        <a href="tel:+74951234568" className="hover:text-primary">
-                          +7 (495) 123-45-68
+                        <a href="tel:+74722301211" className="hover:text-primary">
+                          +7 (4722) 30-12-11
                         </a>
                       </p>
                     </div>
@@ -91,13 +87,9 @@ export default function Contacts() {
                     <div>
                       <h3 className="mb-1 font-semibold">Email</h3>
                       <p className="text-sm text-muted-foreground">
-                        <a href="mailto:kafedra@university.ru" className="hover:text-primary">
-                          kafedra@university.ru
+                        <a href="mailto:pmikm@bsu.edu.ru" className="hover:text-primary">
+                          pmikm@bsu.edu.ru
                         </a>
-                        <br />
-                        <a href="mailto:priem@university.ru" className="hover:text-primary">
-                          priem@university.ru
-                        </a> (приёмная комиссия)
                       </p>
                     </div>
                   </CardContent>

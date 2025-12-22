@@ -18,15 +18,15 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground">
       <nav className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center bg-primary">
-            <GraduationCap className="h-6 w-6 text-primary-foreground" />
+          <div className="flex h-10 w-10 items-center justify-center bg-primary-foreground rounded">
+            <GraduationCap className="h-6 w-6 text-primary" />
           </div>
           <div className="hidden sm:block">
             <p className="text-sm font-semibold leading-tight">Кафедра прикладной математики</p>
-            <p className="text-xs text-muted-foreground">и компьютерного моделирования</p>
+            <p className="text-xs text-primary-foreground/80">и компьютерного моделирования · НИУ «БелГУ»</p>
           </div>
         </Link>
 
@@ -37,10 +37,10 @@ export function Header() {
               key={item.name}
               to={item.href}
               className={cn(
-                "px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
+                "px-3 py-2 text-sm font-medium transition-colors",
                 location.pathname === item.href
-                  ? "text-primary"
-                  : "text-muted-foreground"
+                  ? "bg-primary-foreground/20 rounded"
+                  : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded"
               )}
             >
               {item.name}
@@ -49,7 +49,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+          <Button asChild variant="secondary" size="sm" className="hidden sm:inline-flex">
             <Link to="/auth">
               <User className="mr-2 h-4 w-4" />
               Войти
@@ -60,7 +60,7 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden text-primary-foreground hover:bg-primary-foreground/10"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -70,17 +70,17 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="border-t bg-card lg:hidden">
+        <div className="border-t border-primary-foreground/20 bg-primary lg:hidden">
           <div className="container py-4">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "block py-2 text-sm font-medium transition-colors hover:text-primary",
+                  "block py-2 text-sm font-medium transition-colors",
                   location.pathname === item.href
-                    ? "text-primary"
-                    : "text-muted-foreground"
+                    ? "text-primary-foreground"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
                 )}
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -89,7 +89,7 @@ export function Header() {
             ))}
             <Link
               to="/auth"
-              className="mt-4 flex items-center gap-2 py-2 text-sm font-medium text-primary"
+              className="mt-4 flex items-center gap-2 py-2 text-sm font-medium text-primary-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
               <User className="h-4 w-4" />
