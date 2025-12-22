@@ -61,12 +61,16 @@ export default function Index() {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
         <div className="container relative">
           <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-4 py-2">
+              <GraduationCap className="h-5 w-5" />
+              <span className="text-sm font-medium">НИУ «БелГУ»</span>
+            </div>
             <h1 className="mb-6 font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Кафедра прикладной математики и компьютерного моделирования
             </h1>
             <p className="mb-8 text-lg text-primary-foreground/80 sm:text-xl">
-              Готовим специалистов, способных решать сложные задачи 
-              с помощью математических методов и современных технологий
+              Готовим специалистов будущего в области математического моделирования, 
+              анализа данных и информационных технологий
             </p>
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Button asChild size="lg" variant="secondary">

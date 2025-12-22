@@ -14,11 +14,12 @@ export function Footer() {
               </div>
               <div>
                 <p className="text-sm font-semibold leading-tight">Кафедра ПМиКМ</p>
+                <p className="text-xs text-muted-foreground">НИУ «БелГУ»</p>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Кафедра прикладной математики и компьютерного моделирования — 
-              центр подготовки специалистов в области математического моделирования.
+              Кафедра прикладной математики и компьютерного моделирования 
+              Белгородского государственного национального исследовательского университета.
             </p>
           </div>
 
@@ -59,9 +60,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/programs" className="text-muted-foreground hover:text-primary">
-                  Расписание занятий
-                </Link>
+                <a href="https://bsuedu.ru/bsu/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
+                  Сайт НИУ «БелГУ»
+                </a>
               </li>
               <li>
                 <Link to="/programs" className="text-muted-foreground hover:text-primary">
@@ -82,18 +83,18 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>г. Москва, ул. Университетская, д. 1</span>
+                <span>308015, г. Белгород, ул. Победы, 85</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
-                <a href="tel:+74951234567" className="hover:text-primary">
-                  +7 (495) 123-45-67
+                <a href="tel:+74722301211" className="hover:text-primary">
+                  +7 (4722) 30-12-11
                 </a>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4 shrink-0" />
-                <a href="mailto:kafedra@university.ru" className="hover:text-primary">
-                  kafedra@university.ru
+                <a href="mailto:pmikm@bsu.edu.ru" className="hover:text-primary">
+                  pmikm@bsu.edu.ru
                 </a>
               </li>
             </ul>
@@ -101,7 +102,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Кафедра прикладной математики и компьютерного моделирования. Все права защищены.</p>
+          <p>© {new Date().getFullYear()} Кафедра прикладной математики и компьютерного моделирования НИУ «БелГУ»</p>
         </div>
       </div>
     </footer>
