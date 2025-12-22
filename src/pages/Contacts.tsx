@@ -54,10 +54,10 @@ export default function Contacts() {
                       <MapPin className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="mb-1 font-semibold">Адрес</h3>
+                      <h3 className="mb-1 font-semibold">Адрес кафедры</h3>
                       <p className="text-sm text-muted-foreground">
                         308015, г. Белгород, ул. Победы, 85<br />
-                        Институт инженерных и цифровых технологий
+                        Корпус 14, кабинет 1-11а
                       </p>
                     </div>
                   </CardContent>
