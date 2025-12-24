@@ -5,17 +5,18 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // 👇 ДОБАВИТЬ ЭТУ СТРОКУ
-  base: mode === 'development' ? '/' : '/repo-name/', 
+  base: mode === 'development' ? '/' : '/repo-name/', // Не забудьте свое имя репо
 
   server: {
     host: "::",
     port: 8080,
   },
+  // ИСПРАВЛЕННАЯ СЕКЦИЯ PLUGINS
   plugins: [
     react(),
-    mode === "development" && componentTagger().filter(Boolean),
-  ],
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
