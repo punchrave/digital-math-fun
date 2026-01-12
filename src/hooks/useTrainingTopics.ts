@@ -16,18 +16,18 @@ export function useTrainingTopics() {
   });
 }
 
-export function useTrainingTopic(slug: TopicSlug) {
+export function useTrainingTopic(topicId: string) {
   return useQuery({
-    queryKey: ['training-topic', slug],
+    queryKey: ['training-topic', topicId],
     queryFn: async (): Promise<TrainingTopic | null> => {
       const { data, error } = await trainerDb.trainingTopics()
         .select('*')
-        .eq('slug', slug)
+        .eq('id', topicId)
         .maybeSingle();
       
       if (error) throw error;
       return data as TrainingTopic | null;
     },
-    enabled: !!slug,
+    enabled: !!topicId,
   });
 }

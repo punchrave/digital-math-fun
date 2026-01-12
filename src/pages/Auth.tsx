@@ -1,45 +1,60 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { GraduationCap, LogIn, UserPlus } from "lucide-react";
 
 export default function Auth() {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user, loading, signIn, signUp } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && !loading) {
+      navigate('/trainer');
+    }
+  }, [user, loading, navigate]);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     
-    // Simulate login
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Функция в разработке",
-      description: "Авторизация будет доступна после подключения базы данных",
-    });
-    
+    const { error } = await signIn(email, password);
+    if (error) {
+      toast({ title: "Ошибка входа", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Успешный вход", description: "Добро пожаловать!" });
+      navigate('/trainer');
+    }
     setIsLoading(false);
   };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const name = formData.get('name') as string;
+    const surname = formData.get('surname') as string;
     
-    // Simulate registration
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast({
-      title: "Функция в разработке",
-      description: "Регистрация будет доступна после подключения базы данных",
-    });
-    
+    const { error } = await signUp(email, password, `${name} ${surname}`);
+    if (error) {
+      toast({ title: "Ошибка регистрации", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Регистрация успешна", description: "Вы вошли в систему!" });
+      navigate('/trainer');
+    }
     setIsLoading(false);
   };
 
@@ -74,23 +89,17 @@ export default function Auth() {
                       <Label htmlFor="login-email">Email</Label>
                       <Input 
                         id="login-email" 
+                        name="email"
                         type="email" 
                         required 
                         placeholder="student@university.ru"
                       />
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="login-password">Пароль</Label>
-                        <button 
-                          type="button"
-                          className="text-xs text-muted-foreground hover:text-primary"
-                        >
-                          Забыли пароль?
-                        </button>
-                      </div>
+                      <Label htmlFor="login-password">Пароль</Label>
                       <Input 
                         id="login-password" 
+                        name="password"
                         type="password" 
                         required 
                         placeholder="••••••••"
@@ -114,55 +123,20 @@ export default function Auth() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="register-name">Имя</Label>
-                        <Input 
-                          id="register-name" 
-                          required 
-                          placeholder="Иван"
-                        />
+                        <Input id="register-name" name="name" required placeholder="Иван" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="register-surname">Фамилия</Label>
-                        <Input 
-                          id="register-surname" 
-                          required 
-                          placeholder="Иванов"
-                        />
+                        <Input id="register-surname" name="surname" required placeholder="Иванов" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="register-email">Email</Label>
-                      <Input 
-                        id="register-email" 
-                        type="email" 
-                        required 
-                        placeholder="student@university.ru"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-student-id">Номер студенческого билета</Label>
-                      <Input 
-                        id="register-student-id" 
-                        required 
-                        placeholder="123456"
-                      />
+                      <Input id="register-email" name="email" type="email" required placeholder="student@university.ru" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="register-password">Пароль</Label>
-                      <Input 
-                        id="register-password" 
-                        type="password" 
-                        required 
-                        placeholder="••••••••"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password-confirm">Подтвердите пароль</Label>
-                      <Input 
-                        id="register-password-confirm" 
-                        type="password" 
-                        required 
-                        placeholder="••••••••"
-                      />
+                      <Input id="register-password" name="password" type="password" required placeholder="••••••••" />
                     </div>
                     <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading ? (
