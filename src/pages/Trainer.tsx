@@ -22,6 +22,7 @@ export default function Trainer() {
   
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<TrainingMode | null>(null);
+  const [problemCount, setProblemCount] = useState(10);
 
   const selectedTopicData = topics?.find(t => t.id === selectedTopic);
   const userLevel = userLevels?.find(ul => ul.topic_id === selectedTopic);
@@ -29,7 +30,7 @@ export default function Trainer() {
 
   const handleStartSession = () => {
     if (selectedTopic && selectedMode) {
-      navigate(`/trainer/session?topic=${selectedTopic}&mode=${selectedMode}`);
+      navigate(`/trainer/session?topic=${selectedTopic}&mode=${selectedMode}&count=${problemCount}`);
     }
   };
 
@@ -172,6 +173,8 @@ export default function Trainer() {
                 selectedMode={selectedMode}
                 onSelect={setSelectedMode}
                 onStart={handleStartSession}
+                problemCount={problemCount}
+                onProblemCountChange={setProblemCount}
               />
             </div>
           )}
