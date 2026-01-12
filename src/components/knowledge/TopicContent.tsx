@@ -1,81 +1,18 @@
-import { useEffect } from 'react';
+import 'katex/dist/katex.min.css';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
 import { TopicContent as TopicContentType, KnowledgeTopic } from '@/lib/knowledge/types';
 import { BookOpen, Calculator, Lightbulb } from 'lucide-react';
+import { ContentRenderer, MathRenderer } from './MathRenderer';
+import { InlineMath } from 'react-katex';
 
 interface TopicContentProps {
   topic: KnowledgeTopic;
   content: TopicContentType;
 }
 
-// Simple markdown-like renderer for math content
-function renderContent(text: string) {
-  // Convert markdown bold
-  let html = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  
-  // Convert headers
-  html = html.replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold mt-6 mb-2">$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2 class="text-xl font-semibold mt-8 mb-3">$1</h2>');
-  
-  // Convert lists
-  html = html.replace(/^- (.+)$/gm, '<li class="ml-4">$1</li>');
-  html = html.replace(/^(\d+)\. (.+)$/gm, '<li class="ml-4"><strong>$1.</strong> $2</li>');
-  
-  // Convert tables (basic)
-  html = html.replace(/\|(.+)\|/g, (match) => {
-    const cells = match.split('|').filter(c => c.trim());
-    if (cells.every(c => /^[-:]+$/.test(c.trim()))) {
-      return ''; // Skip separator row
-    }
-    const isHeader = !html.includes('<tr>');
-    const cellTag = isHeader ? 'th' : 'td';
-    const cellClass = isHeader ? 'border px-3 py-2 text-left font-semibold bg-muted' : 'border px-3 py-2';
-    return `<tr>${cells.map(c => `<${cellTag} class="${cellClass}">${c.trim()}</${cellTag}>`).join('')}</tr>`;
-  });
-  
-  // Wrap table rows
-  if (html.includes('<tr>')) {
-    html = html.replace(/(<tr>.*<\/tr>)+/gs, '<table class="w-full border-collapse my-4">$&</table>');
-  }
-  
-  return html;
-}
-
 export function TopicContentComponent({ topic, content }: TopicContentProps) {
-  // Load MathJax for LaTeX rendering
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-    script.async = true;
-    script.id = 'mathjax-script';
-    
-    if (!document.getElementById('mathjax-script')) {
-      // Configure MathJax
-      (window as any).MathJax = {
-        tex: {
-          inlineMath: [['\\(', '\\)']],
-          displayMath: [['$$', '$$']],
-        },
-        startup: {
-          pageReady: () => {
-            (window as any).MathJax.typeset();
-          }
-        }
-      };
-      document.head.appendChild(script);
-    } else {
-      // Re-typeset if MathJax is already loaded
-      setTimeout(() => {
-        if ((window as any).MathJax?.typeset) {
-          (window as any).MathJax.typeset();
-        }
-      }, 100);
-    }
-  }, [content]);
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -103,9 +40,12 @@ export function TopicContentComponent({ topic, content }: TopicContentProps) {
         <CardContent>
           <div className="flex flex-wrap gap-3">
             {content.formulas.map((formula, idx) => (
-              <Badge key={idx} variant="secondary" className="text-sm px-3 py-1.5 font-mono">
-                \({formula}\)
-              </Badge>
+              <div 
+                key={idx} 
+                className="bg-secondary text-secondary-foreground px-3 py-1.5 rounded-md text-sm"
+              >
+                <InlineMath math={formula} />
+              </div>
             ))}
           </div>
         </CardContent>
@@ -133,10 +73,7 @@ export function TopicContentComponent({ topic, content }: TopicContentProps) {
                     <CardTitle>{section.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div 
-                      className="prose prose-sm dark:prose-invert max-w-none"
-                      dangerouslySetInnerHTML={{ __html: renderContent(section.content) }}
-                    />
+                    <ContentRenderer content={section.content} />
                   </CardContent>
                 </Card>
               ))}
@@ -152,17 +89,16 @@ export function TopicContentComponent({ topic, content }: TopicContentProps) {
                   <CardHeader>
                     <CardTitle className="text-lg">{example.title}</CardTitle>
                     <div className="mt-2 p-3 bg-muted rounded-lg">
-                      <p className="font-medium">Задача:</p>
-                      <p className="text-lg">{example.problem}</p>
+                      <p className="font-medium mb-1">Задача:</p>
+                      <div className="text-lg">
+                        <MathRenderer content={example.problem} />
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="font-medium text-primary mb-3">Решение:</p>
-                      <div 
-                        className="prose prose-sm dark:prose-invert max-w-none"
-                        dangerouslySetInnerHTML={{ __html: renderContent(example.solution) }}
-                      />
+                      <ContentRenderer content={example.solution} />
                     </div>
                   </CardContent>
                 </Card>
