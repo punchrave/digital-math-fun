@@ -1,3 +1,4 @@
+import 'katex/dist/katex.min.css';
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, Send, User, Loader2, Sparkles } from 'lucide-react';
 import { KnowledgeTopic } from '@/lib/knowledge/types';
+import { MathRenderer } from './MathRenderer';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -27,15 +29,6 @@ export function AIAssistant({ topic }: AIAssistantProps) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
-
-  // Re-typeset MathJax when messages change
-  useEffect(() => {
-    setTimeout(() => {
-      if ((window as any).MathJax?.typeset) {
-        (window as any).MathJax.typeset();
-      }
-    }, 100);
   }, [messages]);
 
   const sendMessage = async () => {
@@ -152,7 +145,7 @@ export function AIAssistant({ topic }: AIAssistantProps) {
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col p-4 gap-4">
+      <CardContent className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
         <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
           <div className="space-y-4">
             {messages.length === 0 ? (
@@ -181,7 +174,9 @@ export function AIAssistant({ topic }: AIAssistantProps) {
                         : 'bg-muted'
                     }`}
                   >
-                    <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
+                    <div className="text-sm">
+                      <MathRenderer content={msg.content} />
+                    </div>
                   </div>
                   {msg.role === 'user' && (
                     <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
