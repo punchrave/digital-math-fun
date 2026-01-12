@@ -23,12 +23,10 @@ export function AIAssistant({ topic }: AIAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const sendMessage = async () => {
@@ -146,7 +144,7 @@ export function AIAssistant({ topic }: AIAssistantProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-        <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
+        <ScrollArea className="flex-1 pr-4">
           <div className="space-y-4">
             {messages.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -174,7 +172,7 @@ export function AIAssistant({ topic }: AIAssistantProps) {
                         : 'bg-muted'
                     }`}
                   >
-                    <div className="text-sm">
+                    <div className="text-sm whitespace-pre-wrap break-words">
                       <MathRenderer content={msg.content} />
                     </div>
                   </div>
@@ -196,6 +194,7 @@ export function AIAssistant({ topic }: AIAssistantProps) {
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
 
