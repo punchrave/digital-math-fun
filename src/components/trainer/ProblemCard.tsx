@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, XCircle, Lightbulb, SkipForward, Pause, Play } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, SkipForward, Pause, Play, BookOpen } from 'lucide-react';
 import { Problem } from '@/lib/trainer/types';
 import { cn } from '@/lib/utils';
 
@@ -15,8 +15,9 @@ interface ProblemCardProps {
   timeLeft?: number;
   streak: number;
   showHints?: boolean;
+  showSolution?: boolean;
   isPaused?: boolean;
-  lastAnswer?: { isCorrect: boolean; correctAnswer: string } | null;
+  lastAnswer?: { isCorrect: boolean; correctAnswer: string; solution?: string } | null;
   onSubmit: (answer: string) => void;
   onSkip?: () => void;
   onPause?: () => void;
@@ -28,7 +29,8 @@ export function ProblemCard({
   totalProblems,
   timeLeft,
   streak,
-  showHints = false,
+  showHints = true,
+  showSolution = true,
   isPaused = false,
   lastAnswer,
   onSubmit,
@@ -37,11 +39,13 @@ export function ProblemCard({
 }: ProblemCardProps) {
   const [answer, setAnswer] = useState('');
   const [showHint, setShowHint] = useState(false);
+  const [showSolutionPanel, setShowSolutionPanel] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setAnswer('');
     setShowHint(false);
+    setShowSolutionPanel(false);
     inputRef.current?.focus();
   }, [problem.text]);
 
@@ -80,7 +84,7 @@ export function ProblemCard({
           <div className="flex items-center gap-2">
             {timeLeft !== undefined && (
               <Badge 
-                variant={timeLeft < 10 ? "destructive" : "outline"} 
+                variant={timeLeft < 30 ? "destructive" : "outline"} 
                 className="text-lg px-3 py-1"
               >
                 {formatTime(timeLeft)}
@@ -99,31 +103,46 @@ export function ProblemCard({
       </CardHeader>
       
       <CardContent className="space-y-6">
-        {/* Last answer feedback */}
+        {/* Last answer feedback with solution */}
         {lastAnswer && (
-          <div className={cn(
-            "flex items-center gap-2 p-3 rounded-lg text-sm",
-            lastAnswer.isCorrect 
-              ? "bg-chart-1/20 text-chart-1" 
-              : "bg-destructive/20 text-destructive"
-          )}>
-            {lastAnswer.isCorrect ? (
-              <>
-                <CheckCircle className="h-5 w-5" />
-                <span>Правильно!</span>
-              </>
-            ) : (
-              <>
-                <XCircle className="h-5 w-5" />
-                <span>Неверно. Правильный ответ: <strong>{lastAnswer.correctAnswer}</strong></span>
-              </>
+          <div className="space-y-3">
+            <div className={cn(
+              "flex items-center gap-2 p-3 rounded-lg text-sm",
+              lastAnswer.isCorrect 
+                ? "bg-chart-1/20 text-chart-1" 
+                : "bg-destructive/20 text-destructive"
+            )}>
+              {lastAnswer.isCorrect ? (
+                <>
+                  <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                  <span>Правильно!</span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="h-5 w-5 flex-shrink-0" />
+                  <span>Неверно. Правильный ответ: <strong>{lastAnswer.correctAnswer}</strong></span>
+                </>
+              )}
+            </div>
+            
+            {/* Show solution for wrong answers */}
+            {!lastAnswer.isCorrect && showSolution && lastAnswer.solution && (
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-2 text-sm font-medium">
+                  <BookOpen className="h-4 w-4" />
+                  Решение:
+                </div>
+                <pre className="text-sm text-muted-foreground whitespace-pre-wrap font-mono">
+                  {lastAnswer.solution}
+                </pre>
+              </div>
             )}
           </div>
         )}
 
         {/* Problem display */}
         <div className="text-center py-8">
-          <p className="text-4xl md:text-5xl font-mono font-bold tracking-wider">
+          <p className="text-2xl md:text-3xl font-mono font-bold tracking-wider leading-relaxed">
             {problem.text}
           </p>
         </div>
@@ -144,12 +163,33 @@ export function ProblemCard({
           </div>
         )}
 
+        {/* Solution preview (before answering) */}
+        {showSolution && problem.solution && !lastAnswer && (
+          <div className="text-center">
+            {showSolutionPanel ? (
+              <div className="bg-muted/50 p-4 rounded-lg text-left">
+                <div className="flex items-center gap-2 mb-2 text-sm font-medium">
+                  <BookOpen className="h-4 w-4" />
+                  Решение:
+                </div>
+                <pre className="text-sm text-muted-foreground whitespace-pre-wrap font-mono">
+                  {problem.solution}
+                </pre>
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => setShowSolutionPanel(true)}>
+                <BookOpen className="mr-2 h-4 w-4" />
+                Показать решение
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* Answer input */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             ref={inputRef}
             type="text"
-            inputMode="numeric"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Введите ответ..."
@@ -157,11 +197,11 @@ export function ProblemCard({
             disabled={isPaused}
             autoComplete="off"
           />
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-center flex-wrap">
             <Button type="submit" size="lg" disabled={!answer.trim() || isPaused}>
               Ответить
             </Button>
-            {showHints && onSkip && (
+            {onSkip && (
               <Button type="button" variant="outline" size="lg" onClick={onSkip} disabled={isPaused}>
                 <SkipForward className="mr-2 h-4 w-4" />
                 Пропустить

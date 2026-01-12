@@ -12,7 +12,7 @@ interface SessionState {
   totalTimeMs: number; problemTimes: number[]; currentLevel: number; recentCorrect: number[];
 }
 
-export function useTrainingSession(topicId: string, topicSlug: TopicSlug, mode: TrainingMode, initialLevel: number = 1) {
+export function useTrainingSession(topicId: string, topicSlug: TopicSlug, mode: TrainingMode, initialLevel: number = 1, customProblemCount?: number) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const updateTopicLevel = useUpdateTopicLevel();
@@ -22,14 +22,18 @@ export function useTrainingSession(topicId: string, topicSlug: TopicSlug, mode: 
   const { data: userStats } = useUserStats();
   const grantAchievement = useGrantAchievement();
   
-  const config = MODE_CONFIG[mode];
+  const baseConfig = MODE_CONFIG[mode];
+  const config = {
+    ...baseConfig,
+    problemCount: customProblemCount || baseConfig.problemCount,
+  };
   const sessionIdRef = useRef<string | null>(null);
   const timerRef = useRef<number | null>(null);
   
   const [state, setState] = useState<SessionState>({ isActive: false, isPaused: false, currentProblem: null, problemStartTime: 0, currentStreak: 0, bestStreak: 0, correctAnswers: 0, totalProblems: 0, totalTimeMs: 0, problemTimes: [], currentLevel: initialLevel, recentCorrect: [] });
   const [timeLeft, setTimeLeft] = useState(config.timerSeconds || 0);
   const [results, setResults] = useState<SessionResults | null>(null);
-  const [lastAnswer, setLastAnswer] = useState<{ isCorrect: boolean; correctAnswer: string } | null>(null);
+  const [lastAnswer, setLastAnswer] = useState<{ isCorrect: boolean; correctAnswer: string; solution?: string } | null>(null);
 
   useEffect(() => {
     if (state.isActive && !state.isPaused && config.hasTimer && timeLeft > 0) {
@@ -99,7 +103,7 @@ export function useTrainingSession(topicId: string, topicSlug: TopicSlug, mode: 
     if (sessionIdRef.current) await saveSession.mutateAsync({ sessionId: sessionIdRef.current, totalProblems, correctAnswers, totalTimeMs, score, streakBest: bestStreak });
     await updateTopicLevel.mutateAsync({ topicId, level: finalLevel, correct: correctAnswers, attempts: totalProblems, avgTimeMs: Math.round(averageTimeMs), accuracy: Math.round(accuracy * 100) / 100 });
     await updateUserStats.mutateAsync({ pointsEarned: score, problemsSolved: totalProblems, sessionBestStreak: bestStreak });
-    const newAchievements = await checkAchievements((userStats?.total_sessions || 0) + 1, (userStats?.total_problems_solved || 0) + totalProblems, bestStreak, accuracy, mode === 'workout' ? correctAnswers : 0, 1);
+    const newAchievements = await checkAchievements((userStats?.total_sessions || 0) + 1, (userStats?.total_problems_solved || 0) + totalProblems, bestStreak, accuracy, mode === 'test' ? correctAnswers : 0, 1);
     setResults({ totalProblems, correctAnswers, accuracy, totalTimeMs, averageTimeMs, bestStreak, score, grade, newAchievements, levelChange: finalLevel - initialLevel });
     setState(prev => ({ ...prev, isActive: false, isPaused: false, currentProblem: null }));
     queryClient.invalidateQueries({ queryKey: ['user-topic-levels'] });
@@ -119,7 +123,7 @@ export function useTrainingSession(topicId: string, topicSlug: TopicSlug, mode: 
     const newTotal = state.totalProblems + 1;
     const newTotalTime = state.totalTimeMs + timeMs;
     const newProblemTimes = [...state.problemTimes, timeMs];
-    const answerResult = { isCorrect, correctAnswer: state.currentProblem.answer };
+    const answerResult = { isCorrect, correctAnswer: state.currentProblem.answer, solution: state.currentProblem.solution };
     setLastAnswer(answerResult);
     const shouldEnd = (config.problemCount && newTotal >= config.problemCount) || (config.hasTimer && timeLeft <= 0);
     if (shouldEnd) { await endSessionWithData(newTotal, newCorrect, newTotalTime, newBestStreak, newLevel, newProblemTimes); }

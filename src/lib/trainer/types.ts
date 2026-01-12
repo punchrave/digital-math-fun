@@ -1,6 +1,6 @@
 // Типы для цифрового тренажёра
 
-export type TrainingMode = 'workout' | 'practice' | 'exam';
+export type TrainingMode = 'test' | 'practice' | 'exam';
 
 export type TopicSlug = 'limits' | 'derivatives' | 'integrals' | 'logarithms' | 'matrices' | 'linear_systems' | 'series' | 'diff_equations' | 'complex_numbers' | 'vectors';
 
@@ -100,6 +100,7 @@ export interface Problem {
   answer: string;
   difficulty: number;
   hint?: string;
+  solution?: string; // Пошаговое решение
 }
 
 // Результаты сессии для отображения
@@ -117,43 +118,49 @@ export interface SessionResults {
 }
 
 // Настройки режимов тренировки
-export const MODE_CONFIG: Record<TrainingMode, {
+export interface ModeConfig {
   name: string;
   description: string;
   icon: string;
   hasTimer: boolean;
   timerSeconds?: number;
   problemCount?: number;
+  customProblemCount?: boolean; // Пользователь выбирает количество
   showHints: boolean;
   showSolution: boolean;
-}> = {
-  workout: {
-    name: 'Воркаут',
-    description: 'Решите как можно больше примеров за 60 секунд',
-    icon: 'timer',
-    hasTimer: true,
-    timerSeconds: 60,
-    showHints: false,
-    showSolution: false,
+}
+
+export const MODE_CONFIG: Record<TrainingMode, ModeConfig> = {
+  test: {
+    name: 'Тест по теме',
+    description: 'Проверьте знания без ограничения по времени',
+    icon: 'clipboard-check',
+    hasTimer: false,
+    problemCount: 10,
+    customProblemCount: true,
+    showHints: true,
+    showSolution: true,
   },
   practice: {
     name: 'Тренировка',
-    description: '10 задач без ограничения по времени с подсказками',
+    description: 'Практикуйтесь с подсказками и решениями',
     icon: 'book-open',
     hasTimer: false,
     problemCount: 10,
+    customProblemCount: true,
     showHints: true,
     showSolution: true,
   },
   exam: {
     name: 'Экзамен',
-    description: '15 задач за 5 минут без подсказок',
+    description: 'Строгий режим с ограничением по времени',
     icon: 'graduation-cap',
     hasTimer: true,
-    timerSeconds: 300,
-    problemCount: 15,
-    showHints: false,
-    showSolution: false,
+    timerSeconds: 600,
+    problemCount: 20,
+    customProblemCount: true,
+    showHints: true,
+    showSolution: true,
   },
 };
 

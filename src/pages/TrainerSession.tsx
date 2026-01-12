@@ -17,6 +17,7 @@ export default function TrainerSession() {
   const navigate = useNavigate();
   const topicId = searchParams.get('topic');
   const mode = searchParams.get('mode') as TrainingMode | null;
+  const customCount = searchParams.get('count') ? parseInt(searchParams.get('count')!) : undefined;
 
   const { user, loading: authLoading } = useAuth();
   const { data: topic, isLoading: topicLoading } = useTrainingTopic(topicId || '');
@@ -36,9 +37,10 @@ export default function TrainerSession() {
     isLoading,
   } = useTrainingSession(
     topicId || '',
-    (topic?.slug || 'arithmetic') as TopicSlug,
+    (topic?.slug || 'limits') as TopicSlug,
     mode || 'practice',
-    userLevel?.current_level || 1
+    userLevel?.current_level || 1,
+    customCount
   );
 
   // Redirect if no topic/mode
@@ -141,10 +143,11 @@ export default function TrainerSession() {
             timeLeft={config.hasTimer ? timeLeft : undefined}
             streak={state.currentStreak}
             showHints={config.showHints}
+            showSolution={config.showSolution}
             isPaused={state.isPaused}
             lastAnswer={lastAnswer}
             onSubmit={submitAnswer}
-            onSkip={config.showSolution ? skipProblem : undefined}
+            onSkip={skipProblem}
             onPause={config.hasTimer ? togglePause : undefined}
           />
         </div>
