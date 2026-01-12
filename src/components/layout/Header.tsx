@@ -8,7 +8,7 @@ const navigation = [
 	{ name: 'Главная', href: '/' },
 	{ name: 'О кафедре', href: '/about' },
 	{ name: 'Преподаватели', href: '/teachers' },
-	{ name: 'Тренажёр', href: '/trainer' },
+	{ name: 'База знаний', href: '/knowledge' },
 	{ name: 'Новости', href: '/news' },
 	{ name: 'Контакты', href: '/contacts' },
 ]

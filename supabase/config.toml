@@ -1,1 +1,4 @@
 project_id = "voytwuglrijfaxrocjig"
+
+[functions.math-assistant]
+verify_jwt = false
