@@ -2,7 +2,7 @@
 
 export type TrainingMode = 'workout' | 'practice' | 'exam';
 
-export type TopicSlug = 'arithmetic' | 'fractions' | 'equations' | 'powers' | 'percentages';
+export type TopicSlug = 'limits' | 'derivatives' | 'integrals' | 'logarithms' | 'matrices' | 'linear_systems' | 'series' | 'diff_equations' | 'complex_numbers' | 'vectors';
 
 export interface TrainingTopic {
   id: string;
