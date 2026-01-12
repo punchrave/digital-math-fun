@@ -99,6 +99,7 @@ export interface Problem {
   text: string;
   answer: string;
   difficulty: number;
+  hint?: string;
 }
 
 // Результаты сессии для отображения
