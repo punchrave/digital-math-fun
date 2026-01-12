@@ -17,6 +17,7 @@ import {
 	Users,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { AIAssistant } from '@/components/knowledge/AIAssistant'
 
 const features = [
 	{
@@ -48,7 +49,7 @@ const news = [
 		date: '22 декабря 2025',
 		title: 'Фестиваль арабского языка и культуры в НИУ «БелГУ»',
 		description:
-			'В университете прثошёл Фестиваль арабского языка и культуры с участием студентов и гостей.',
+			'В университете прошёл Фестиваль арабского языка и культуры с участием студентов и гостей.',
 	},
 	{
 		date: '20 декабря 2025',
@@ -143,6 +144,41 @@ export default function Index() {
 				</div>
 			</section>
 
+			{/* AI Assistant Section */}
+			<section className='py-16 lg:py-24 bg-muted/30'>
+				<div className='container'>
+					<div className='grid gap-8 lg:grid-cols-2 items-center'>
+						<div className='animate-fade-in'>
+							<h2 className='mb-4 font-serif text-3xl font-bold'>
+								AI-Помощник по навигации
+							</h2>
+							<p className='text-muted-foreground mb-6'>
+								Не знаете, где найти нужную информацию? Наш AI-ассистент поможет 
+								вам сориентироваться на сайте кафедры. Задайте вопрос о программах 
+								обучения, преподавателях, новостях или контактах.
+							</p>
+							<ul className='space-y-2 text-sm text-muted-foreground'>
+								<li className='flex items-center gap-2'>
+									<span className='w-1.5 h-1.5 rounded-full bg-primary' />
+									Подскажет где найти информацию
+								</li>
+								<li className='flex items-center gap-2'>
+									<span className='w-1.5 h-1.5 rounded-full bg-primary' />
+									Расскажет о программах обучения
+								</li>
+								<li className='flex items-center gap-2'>
+									<span className='w-1.5 h-1.5 rounded-full bg-primary' />
+									Ответит на вопросы о кафедре
+								</li>
+							</ul>
+						</div>
+						<div className='h-[500px] animate-fade-in' style={{ animationDelay: '150ms' }}>
+							<AIAssistant variant='navigation' />
+						</div>
+					</div>
+				</div>
+			</section>
+
 			{/* Features Section */}
 			<section className='py-16 lg:py-24'>
 				<div className='container'>
@@ -156,10 +192,11 @@ export default function Index() {
 						</p>
 					</div>
 					<div className='grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
-						{features.map(feature => (
+						{features.map((feature, idx) => (
 							<Card
 								key={feature.title}
-								className='border-0 bg-card shadow-sm transition-shadow hover:shadow-md'
+								className='border-0 bg-card shadow-sm transition-shadow hover:shadow-md animate-fade-in'
+								style={{ animationDelay: `${idx * 100}ms` }}
 							>
 								<CardHeader>
 									<div className='mb-2 flex h-12 w-12 items-center justify-center bg-primary/10'>
@@ -196,10 +233,11 @@ export default function Index() {
 						</Button>
 					</div>
 					<div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-						{news.map(item => (
+						{news.map((item, idx) => (
 							<Card
 								key={item.title}
-								className='group cursor-pointer border transition-all hover:border-primary/20 hover:shadow-md'
+								className='group cursor-pointer border transition-all hover:border-primary/20 hover:shadow-md animate-fade-in'
+								style={{ animationDelay: `${idx * 100}ms` }}
 							>
 								<CardHeader>
 									<div className='mb-2 flex items-center gap-2 text-sm text-muted-foreground'>
