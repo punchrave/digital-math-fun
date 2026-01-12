@@ -23,10 +23,15 @@ export function AIAssistant({ topic }: AIAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
   }, [messages]);
 
   const sendMessage = async () => {
@@ -144,59 +149,60 @@ export function AIAssistant({ topic }: AIAssistantProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-        <ScrollArea className="flex-1 pr-4">
-          <div className="space-y-4">
-            {messages.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p className="mb-2">Привет! Я AI-ассистент по математике.</p>
-                <p className="text-sm">
-                  Задайте вопрос по {topic ? `теме «${topic.name}»` : 'любой теме'}, и я помогу разобраться!
-                </p>
-              </div>
-            ) : (
-              messages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Bot className="h-4 w-4 text-primary" />
-                    </div>
-                  )}
+        <div ref={scrollAreaRef} className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full pr-4">
+            <div className="space-y-4">
+              {messages.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Bot className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p className="mb-2">Привет! Я AI-ассистент по математике.</p>
+                  <p className="text-sm">
+                    Задайте вопрос по {topic ? `теме «${topic.name}»` : 'любой теме'}, и я помогу разобраться!
+                  </p>
+                </div>
+              ) : (
+                messages.map((msg, idx) => (
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      msg.role === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted'
-                    }`}
+                    key={idx}
+                    className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className="text-sm whitespace-pre-wrap break-words">
-                      <MathRenderer content={msg.content} />
+                    {msg.role === 'assistant' && (
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Bot className="h-4 w-4 text-primary" />
+                      </div>
+                    )}
+                    <div
+                      className={`max-w-[80%] p-3 rounded-lg ${
+                        msg.role === 'user'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted'
+                      }`}
+                    >
+                      <div className="text-sm whitespace-pre-wrap break-words">
+                        <MathRenderer content={msg.content} />
+                      </div>
                     </div>
+                    {msg.role === 'user' && (
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                        <User className="h-4 w-4 text-primary-foreground" />
+                      </div>
+                    )}
                   </div>
-                  {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <User className="h-4 w-4 text-primary-foreground" />
-                    </div>
-                  )}
+                ))
+              )}
+              {isLoading && messages[messages.length - 1]?.role === 'user' && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Bot className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="bg-muted p-3 rounded-lg">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
                 </div>
-              ))
-            )}
-            {isLoading && messages[messages.length - 1]?.role === 'user' && (
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Bot className="h-4 w-4 text-primary" />
-                </div>
-                <div className="bg-muted p-3 rounded-lg">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        </ScrollArea>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
 
         <div className="flex gap-2">
           <Textarea
