@@ -4,7 +4,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, BookOpen, Calculator, Calendar, ChevronRight, GraduationCap, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AIAssistant } from "@/components/knowledge/AIAssistant";
+import { SEOHead, OrganizationJsonLd, FAQJsonLd } from "@/components/seo";
 
+// FAQ для Schema.org разметки (улучшает отображение в поиске)
+const faqData = [
+  {
+    question: "Какие образовательные программы предлагает кафедра?",
+    answer: "Кафедра прикладной математики и компьютерного моделирования предлагает программы бакалавриата и магистратуры в области математического моделирования, анализа данных и информационных технологий."
+  },
+  {
+    question: "Как связаться с кафедрой?",
+    answer: "Вы можете связаться с нами по телефону +7-4722-30-12-11 или по электронной почте pmikm@bsu.edu.ru. Также можно посетить нас по адресу: г. Белгород, ул. Победы, 85."
+  },
+  {
+    question: "Есть ли у кафедры база знаний по математике?",
+    answer: "Да, на нашем сайте есть интерактивная база знаний по высшей математике с теоретическими материалами, примерами и AI-ассистентом для помощи в обучении."
+  },
+];
 const features = [
   {
     icon: Calculator,
@@ -49,6 +65,15 @@ const news = [
 export default function Index() {
   return (
     <Layout>
+      {/* SEO мета-теги и структурированные данные */}
+      <SEOHead 
+        title="Главная"
+        description="Кафедра прикладной математики и компьютерного моделирования НИУ БелГУ. Образовательные программы, научная деятельность, база знаний по высшей математике с AI-ассистентом."
+        keywords={['математика', 'БелГУ', 'прикладная математика', 'компьютерное моделирование', 'образование', 'высшая математика', 'AI обучение']}
+      />
+      <OrganizationJsonLd />
+      <FAQJsonLd questions={faqData} />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-primary py-24 text-primary-foreground">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />

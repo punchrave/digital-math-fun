@@ -12,6 +12,7 @@ import News from "./pages/News";
 import Contacts from "./pages/Contacts";
 import Auth from "./pages/Auth";
 import Knowledge from "./pages/Knowledge";
+import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/knowledge" element={<Knowledge />} />
+          <Route path="/sitemap" element={<Sitemap />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HashRouter>

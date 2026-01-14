@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { TOPICS, KnowledgeTopic } from '@/lib/knowledge/types';
 import { TOPIC_CONTENT } from '@/lib/knowledge/content';
 import { ArrowLeft, BookOpen } from 'lucide-react';
+import { 
+  SEOHead, 
+  LearningResourceJsonLd, 
+  BreadcrumbJsonLd,
+  generateTopicKeywords 
+} from '@/components/seo';
 
 export default function Knowledge() {
   const [selectedTopic, setSelectedTopic] = useState<KnowledgeTopic | null>(null);
@@ -15,17 +21,61 @@ export default function Knowledge() {
     <Layout>
       <section className="py-8 md:py-12">
         <div className="container">
-          {!selectedTopic ? (
-            <>
-              <div className="mb-8">
-                <h1 className="font-serif text-3xl font-bold mb-2 flex items-center gap-3">
-                  <BookOpen className="h-8 w-8 text-primary" />
-                  База знаний
-                </h1>
-                <p className="text-muted-foreground">
-                  Теоретический материал и разобранные примеры по высшей математике
-                </p>
-              </div>
+      {/* SEO для списка тем */}
+      {!selectedTopic ? (
+        <>
+          <SEOHead 
+            title="База знаний по высшей математике"
+            description="Интерактивная база знаний по высшей математике: пределы, производные, интегралы, матрицы и другие темы. Теория, формулы и разобранные примеры с AI-ассистентом."
+            keywords={['база знаний', 'высшая математика', 'формулы', 'примеры', 'теория', 'пределы', 'производные', 'интегралы', 'матрицы']}
+          />
+          <LearningResourceJsonLd
+            name="База знаний по высшей математике"
+            description="Интерактивная образовательная платформа с теоретическими материалами, формулами и примерами по высшей математике"
+            teaches={TOPICS.map(t => t.name)}
+          />
+          <BreadcrumbJsonLd 
+            items={[
+              { name: 'Главная', url: 'https://digital-math-fun.lovable.app' },
+              { name: 'База знаний' }
+            ]}
+          />
+        </>
+      ) : (
+        <>
+          {/* SEO для выбранной темы */}
+          <SEOHead 
+            title={`${selectedTopic.name} — База знаний`}
+            description={`${selectedTopic.description}. Теория, ключевые формулы и разобранные примеры с пошаговыми решениями.`}
+            keywords={generateTopicKeywords(selectedTopic.name, selectedTopic.description)}
+          />
+          <LearningResourceJsonLd
+            name={selectedTopic.name}
+            description={selectedTopic.description}
+            teaches={TOPIC_CONTENT[selectedTopic.slug].formulas.slice(0, 5)}
+            topic={selectedTopic.name}
+          />
+          <BreadcrumbJsonLd 
+            items={[
+              { name: 'Главная', url: 'https://digital-math-fun.lovable.app' },
+              { name: 'База знаний', url: 'https://digital-math-fun.lovable.app/#/knowledge' },
+              { name: selectedTopic.name }
+            ]}
+          />
+        </>
+      )}
+
+      {!selectedTopic ? (
+        <>
+          <div className="mb-8">
+            <h1 className="font-serif text-3xl font-bold mb-2 flex items-center gap-3">
+              <BookOpen className="h-8 w-8 text-primary" />
+              База знаний
+            </h1>
+            <p className="text-muted-foreground">
+              Теоретический материал и разобранные примеры по высшей математике
+            </p>
+          </div>
 
               <div className="grid gap-8 lg:grid-cols-3">
                 <div className="lg:col-span-2">
