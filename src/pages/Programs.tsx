@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, Users, GraduationCap, BookOpen, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { SEOHead, CourseJsonLd, BreadcrumbJsonLd } from "@/components/seo";
 const programs = {
   bachelor: [
     {
@@ -208,6 +208,23 @@ function ProgramCard({ program }: { program: typeof programs.bachelor[0] }) {
 export default function Programs() {
   return (
     <Layout>
+      <SEOHead 
+        title="Образовательные программы"
+        description="Программы бакалавриата, магистратуры, специалитета и аспирантуры кафедры прикладной математики и компьютерного моделирования НИУ БелГУ. Прикладная математика, информатика, IT."
+        keywords={['образование', 'бакалавриат', 'магистратура', 'аспирантура', 'прикладная математика', 'информатика', 'БелГУ', 'IT образование']}
+      />
+      <CourseJsonLd
+        name="Прикладная математика и информатика"
+        description="Программы высшего образования в области математического моделирования, программирования и анализа данных"
+        teaches={['Математический анализ', 'Программирование', 'Машинное обучение', 'Численные методы', 'Big Data']}
+      />
+      <BreadcrumbJsonLd 
+        items={[
+          { name: 'Главная', url: 'https://digital-math-fun.lovable.app' },
+          { name: 'Образовательные программы' }
+        ]}
+      />
+
       {/* Hero */}
       <section className="bg-primary py-16 text-primary-foreground">
         <div className="container">

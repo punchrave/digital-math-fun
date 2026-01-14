@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
 import { useState } from 'react'
+import { SEOHead, BreadcrumbJsonLd } from '@/components/seo'
 
 export default function Contacts() {
 	const { toast } = useToast()
@@ -36,6 +37,18 @@ export default function Contacts() {
 
 	return (
 		<Layout>
+			<SEOHead 
+				title="Контакты"
+				description="Контактная информация кафедры прикладной математики и компьютерного моделирования НИУ БелГУ. Адрес, телефон, email и форма обратной связи."
+				keywords={['контакты', 'БелГУ', 'адрес', 'телефон', 'email', 'обратная связь']}
+			/>
+			<BreadcrumbJsonLd 
+				items={[
+					{ name: 'Главная', url: 'https://digital-math-fun.lovable.app' },
+					{ name: 'Контакты' }
+				]}
+			/>
+
 			{/* Hero */}
 			<section className='bg-primary py-16 text-primary-foreground'>
 				<div className='container'>

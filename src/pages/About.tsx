@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Award, Target, BookOpen, Users, Building, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { SEOHead, BreadcrumbJsonLd } from "@/components/seo";
 const milestones = [
   { year: "1876", event: "Основание Белгородского учительского института" },
   { year: "1919", event: "Преобразование в Белгородский педагогический институт" },
@@ -46,6 +46,18 @@ const universityFacts = [
 export default function About() {
   return (
     <Layout>
+      <SEOHead 
+        title="О кафедре"
+        description="История и структура кафедры прикладной математики и компьютерного моделирования НИУ БелГУ. Миссия, достижения и научные направления."
+        keywords={['о кафедре', 'БелГУ', 'история', 'миссия', 'научные направления', 'институт инженерных технологий']}
+      />
+      <BreadcrumbJsonLd 
+        items={[
+          { name: 'Главная', url: 'https://digital-math-fun.lovable.app' },
+          { name: 'О кафедре' }
+        ]}
+      />
+
       {/* Hero */}
       <section className="bg-primary py-16 text-primary-foreground">
         <div className="container">
