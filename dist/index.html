@@ -44,62 +44,10 @@
 		<!-- Preconnect для оптимизации загрузки -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<script type="module" crossorigin src="./assets/index-B76ajn3l.js"></script>
 	</head>
 
 	<body>
 		<div id="root"></div>
-		<script type="module">
-			const manifestCandidates = ["./.vite/manifest.json", "./dist/.vite/manifest.json"];
-
-			const appendCss = (basePath, cssFiles = []) => {
-				cssFiles.forEach((cssFile) => {
-					const href = `${basePath}${cssFile}`;
-					if (document.querySelector(`link[data-app-css="${href}"]`)) {
-						return;
-					}
-
-					const link = document.createElement("link");
-					link.rel = "stylesheet";
-					link.href = href;
-					link.dataset.appCss = href;
-					document.head.appendChild(link);
-				});
-			};
-
-			const loadFromManifest = async () => {
-				for (const manifestUrl of manifestCandidates) {
-					const response = await fetch(manifestUrl, { cache: "no-store" }).catch(() => null);
-					if (!response?.ok) {
-						continue;
-					}
-
-					const manifest = await response.json();
-					const entry = manifest["src/main.tsx"] ?? manifest["index.html"];
-					if (!entry?.file) {
-						continue;
-					}
-
-					const basePath = manifestUrl.replace(".vite/manifest.json", "");
-					appendCss(basePath, entry.css);
-					await import(/* @vite-ignore */ `${basePath}${entry.file}`);
-					return true;
-				}
-
-				return false;
-			};
-
-			const bootstrap = async () => {
-				const loadedBuiltApp = await loadFromManifest();
-				if (loadedBuiltApp) {
-					return;
-				}
-
-				await import(/* @vite-ignore */ "/src/main.tsx");
-			};
-
-			bootstrap().catch((error) => {
-				console.error("Failed to start the application.", error);
-			});
-		</script>
 	</body>
 </html>

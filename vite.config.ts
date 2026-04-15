@@ -5,7 +5,11 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === 'development' ? '/' : '/digital-math-fun/', 
+  base: mode === "development" ? "/" : "./",
+
+  build: {
+    manifest: true,
+  },
 
   server: {
     host: "::",
