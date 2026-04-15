@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { isSupabaseConfigured, supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
 const DAILY_LIMIT = 10;
@@ -10,7 +10,7 @@ export function useAILimit() {
   const [loading, setLoading] = useState(true);
 
   const fetchLimit = useCallback(async () => {
-    if (!user) {
+    if (!supabase || !user) {
       setLoading(false);
       return;
     }
@@ -45,7 +45,7 @@ export function useAILimit() {
   }, [authLoading, fetchLimit]);
 
   const incrementCount = useCallback(async () => {
-    if (!user) return false;
+    if (!supabase || !user) return false;
 
     try {
       const today = new Date().toISOString().split('T')[0];
@@ -99,7 +99,7 @@ export function useAILimit() {
     loading: loading || authLoading,
     questionCount,
     remainingQuestions: Math.max(0, DAILY_LIMIT - questionCount),
-    canAsk: isAuthenticated && questionCount < DAILY_LIMIT,
+    canAsk: isSupabaseConfigured && isAuthenticated && questionCount < DAILY_LIMIT,
     dailyLimit: DAILY_LIMIT,
     incrementCount,
     refetch: fetchLimit

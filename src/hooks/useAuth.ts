@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, supabaseConfigError } from '@/integrations/supabase/client';
+
+const getSupabaseUnavailableError = () => new Error(supabaseConfigError);
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -8,6 +10,11 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     // Получаем текущую сессию
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -26,6 +33,10 @@ export function useAuth() {
   }, []);
 
   const signUp = async (email: string, password: string, displayName?: string) => {
+    if (!supabase) {
+      return { data: null, error: getSupabaseUnavailableError() };
+    }
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -39,6 +50,10 @@ export function useAuth() {
   };
 
   const signIn = async (email: string, password: string) => {
+    if (!supabase) {
+      return { data: null, error: getSupabaseUnavailableError() };
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -47,6 +62,10 @@ export function useAuth() {
   };
 
   const signOut = async () => {
+    if (!supabase) {
+      return { error: getSupabaseUnavailableError() };
+    }
+
     const { error } = await supabase.auth.signOut();
     return { error };
   };

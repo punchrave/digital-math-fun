@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bot, Send, User, Loader2, Sparkles, Trash2, Lock, LogIn } from 'lucide-react';
+import { Bot, Send, User, Loader2, Sparkles, Trash2, Lock, LogIn, AlertTriangle } from 'lucide-react';
 import { KnowledgeTopic } from '@/lib/knowledge/types';
 import { MathRenderer } from './MathRenderer';
 import { useAILimit } from '@/hooks/useAILimit';
 import { Link } from 'react-router-dom';
+import { isSupabaseConfigured, supabaseConfigError } from '@/integrations/supabase/client';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -20,8 +21,9 @@ interface AIAssistantProps {
   variant?: 'default' | 'navigation';
 }
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/math-assistant`;
-const NAVIGATION_CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/navigation-assistant`;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const CHAT_URL = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/math-assistant` : '';
+const NAVIGATION_CHAT_URL = SUPABASE_URL ? `${SUPABASE_URL}/functions/v1/navigation-assistant` : '';
 
 export function AIAssistant({ topic, variant = 'default' }: AIAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -167,6 +169,30 @@ export function AIAssistant({ topic, variant = 'default' }: AIAssistantProps) {
   };
 
   const welcome = getWelcomeMessage();
+
+  if (!isSupabaseConfigured) {
+    return (
+      <Card className="h-full flex flex-col">
+        <CardHeader className="pb-3 border-b">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            AI-РђСЃСЃРёСЃС‚РµРЅС‚
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 flex flex-col items-center justify-center text-center p-6">
+          <div className="p-4 rounded-full bg-muted mb-4">
+            <AlertTriangle className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="font-semibold text-lg mb-2">AI временно недоступен</h3>
+          <p className="text-muted-foreground text-sm">
+            {supabaseConfigError}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (loading) {
     return (

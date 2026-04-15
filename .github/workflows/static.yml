@@ -28,7 +28,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build
+        run: |
+          if [ -n "${{ vars.VITE_SUPABASE_URL }}" ]; then
+            export VITE_SUPABASE_URL="${{ vars.VITE_SUPABASE_URL }}"
+          fi
+          if [ -n "${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}" ]; then
+            export VITE_SUPABASE_PUBLISHABLE_KEY="${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}"
+          fi
+          npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

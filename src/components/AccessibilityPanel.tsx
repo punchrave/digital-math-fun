@@ -29,14 +29,55 @@ const defaultSettings: AccessibilitySettings = {
 	largeSpacing: false,
 }
 
+const STORAGE_KEY = 'accessibility-settings'
+
+function readAccessibilitySettings(): AccessibilitySettings {
+	try {
+		const saved = localStorage.getItem(STORAGE_KEY)
+		if (!saved) {
+			return defaultSettings
+		}
+
+		const parsed = JSON.parse(saved) as Partial<AccessibilitySettings>
+		return {
+			fontSize:
+				typeof parsed.fontSize === 'number'
+					? parsed.fontSize
+					: defaultSettings.fontSize,
+			highContrast:
+				typeof parsed.highContrast === 'boolean'
+					? parsed.highContrast
+					: defaultSettings.highContrast,
+			grayscale:
+				typeof parsed.grayscale === 'boolean'
+					? parsed.grayscale
+					: defaultSettings.grayscale,
+			underlineLinks:
+				typeof parsed.underlineLinks === 'boolean'
+					? parsed.underlineLinks
+					: defaultSettings.underlineLinks,
+			largeSpacing:
+				typeof parsed.largeSpacing === 'boolean'
+					? parsed.largeSpacing
+					: defaultSettings.largeSpacing,
+		}
+	} catch (error) {
+		console.warn('Failed to read accessibility settings from localStorage.', error)
+		return defaultSettings
+	}
+}
+
 export function AccessibilityPanel() {
-	const [settings, setSettings] = useState<AccessibilitySettings>(() => {
-		const saved = localStorage.getItem('accessibility-settings')
-		return saved ? JSON.parse(saved) : defaultSettings
-	})
+	const [settings, setSettings] = useState<AccessibilitySettings>(() =>
+		readAccessibilitySettings()
+	)
 
 	useEffect(() => {
-		localStorage.setItem('accessibility-settings', JSON.stringify(settings))
+		try {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+		} catch (error) {
+			console.warn('Failed to persist accessibility settings to localStorage.', error)
+		}
 		applySettings(settings)
 	}, [settings])
 
