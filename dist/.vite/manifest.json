@@ -1,12 +1,9 @@
 {
   "index.html": {
-    "file": "assets/index-B76ajn3l.js",
+    "file": "assets/index-CNes8Ld9.js",
     "name": "index",
     "src": "index.html",
-    "isEntry": true,
-    "dynamicImports": [
-      "src/main.tsx"
-    ]
+    "isEntry": true
   },
   "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.ttf": {
     "file": "assets/KaTeX_AMS-Regular-DRggAlZN.ttf",
@@ -248,7 +245,7 @@
     "file": "assets/main-C6k2M2oa.js",
     "name": "main",
     "src": "src/main.tsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "css": [
       "assets/main-CnFvk-xF.css"
     ],

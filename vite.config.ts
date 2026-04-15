@@ -9,6 +9,12 @@ export default defineConfig(({ mode }) => ({
 
   build: {
     manifest: true,
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, "index.html"),
+        main: path.resolve(__dirname, "src/main.tsx"),
+      },
+    },
   },
 
   server: {

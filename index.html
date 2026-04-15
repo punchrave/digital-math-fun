@@ -80,8 +80,9 @@
 					}
 
 					const basePath = manifestUrl.replace(".vite/manifest.json", "");
+					const entryUrl = new URL(`${basePath}${entry.file}`, window.location.href).href;
 					appendCss(basePath, entry.css);
-					await import(/* @vite-ignore */ `${basePath}${entry.file}`);
+					await import(/* @vite-ignore */ entryUrl);
 					return true;
 				}
 
@@ -94,7 +95,8 @@
 					return;
 				}
 
-				await import(/* @vite-ignore */ "/src/main.tsx");
+				const devEntryUrl = new URL("/src/main.tsx", window.location.origin).href;
+				await import(/* @vite-ignore */ devEntryUrl);
 			};
 
 			bootstrap().catch((error) => {
