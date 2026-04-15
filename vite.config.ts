@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
   base: mode === "development" ? "/" : "./",
 
   build: {
-    manifest: true,
+    manifest: "manifest.json",
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, "index.html"),

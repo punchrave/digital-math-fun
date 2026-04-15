@@ -49,7 +49,7 @@
 	<body>
 		<div id="root"></div>
 		<script type="module">
-			const manifestCandidates = ["./.vite/manifest.json", "./dist/.vite/manifest.json"];
+			const manifestCandidates = ["./manifest.json", "./dist/manifest.json"];
 
 			const appendCss = (basePath, cssFiles = []) => {
 				cssFiles.forEach((cssFile) => {
@@ -79,7 +79,7 @@
 						continue;
 					}
 
-					const basePath = manifestUrl.replace(".vite/manifest.json", "");
+					const basePath = manifestUrl.replace("manifest.json", "");
 					const entryUrl = new URL(`${basePath}${entry.file}`, window.location.href).href;
 					appendCss(basePath, entry.css);
 					await import(/* @vite-ignore */ entryUrl);
